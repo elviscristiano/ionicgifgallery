@@ -1,19 +1,17 @@
 import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
 
-import { AboutPage } from '../about/about';
-import { ContactPage } from '../contact/contact';
+import { FavouritesPage } from '../favourites/favourites';
 import { HomePage } from '../home/home';
 
 @Component({
   templateUrl: 'tabs.html'
 })
-export class TabsPage {
 
+export class TabsPage 
+{
   tab1Root = HomePage;
-  tab2Root = AboutPage;
-  tab3Root = ContactPage;
+  tab2Root = FavouritesPage;
 
-  constructor() {
-
-  }
+  constructor(public navCtrl: NavController){}
 }

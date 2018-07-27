@@ -14,3 +14,20 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+.background, .background .pane, .background .item, .background .item-complex .item-content, .content, .list {
+    background-color: #f0feee;
+}
+
+.verticalPad {
+    padding-top: 2.3em;
+}
+
+ion-icon{
+	color: #f66f8e;
+}
+
+.my-page {
+    background-color: #f0feee;
+}
