@@ -38,50 +38,39 @@ export class StorageService
 	  		}
 		  	// ios and android storage directories
 		  	if (this.platform.is('ios')) {
-		    	this.storageDirectory = file.documentsDirectory;
+		    	this.storageDirectory = cordova.file.documentsDirectory;
 		  	}
 		  	else if(this.platform.is('android')) {
-		    	this.storageDirectory = file.externalDataDirectory;
+		    	this.storageDirectory = cordova.file.externalDataDirectory;
 		  		file.checkDir(this.storageDirectory,'')
-		  		.then((result) => {
-		  			if (!result) {
-		    			file.createDir(this.storageDirectory,'', true)
-		    			.then((result) => {
-		    				console.log('Directory created.');
-		   				},
-		   				(error) => {
-       						const alertFailure = this.alertCtrl.create({
-			          			title: 'Server error: directory not created!',
-			          			buttons: ['Ok']
-			        		});
-			        		alertFailure.present();
-		   				});
-		  			} else {
-		  				file.listDir(this.storageDirectory,'')
-				 		.then(entries => entries.filter(value => {
-							this.imgLocalUrl.push(this.storageDirectory + value.name);				 				
-		  				}),
-				 		(error) => {
-					        const alertFailure = this.alertCtrl.create({
-					          	title: 'Nothing to show!',
-					          	buttons: ['Ok']
-					        });
-					        alertFailure.present();
-				 		});
-		  			}
-		  		},
-			    (error) => {
-			        const alertFailure = this.alertCtrl.create({
-			          	title: 'Server error: directory not exists!',
-			          	buttons: ['Ok']
-			        });
-			        alertFailure.present();
-			    });
+		  		.then((exists) => {
+					this.onListFavourites();
+	  			},
+			    (notExists) => {
+	    			file.createDir(this.storageDirectory,'', true)
+	    			.then((result) => {
+	    				console.log('Directory created.');
+	   				},
+	   				(error) => {
+						const alertFailure = this.alertCtrl.create({
+		          			title: 'Server error: directory not created!',
+		          			buttons: ['Ok']
+		        		});
+		        		alertFailure.present();
+	   				});			    
+	    		});
 		  	}
 		  	else {
 		    	return false;
 		  	}
-		});
+		},
+	    (error) => {
+	        const alertFailure = this.alertCtrl.create({
+	          	title: 'Device is not available.',
+	          	buttons: ['Ok']
+	        });
+	        alertFailure.present();
+	    });
 	}
 
 	/**
@@ -136,6 +125,7 @@ export class StorageService
 	    	{
 	    		this.file.removeFile(this.storageDirectory, fileName + '.' + extension)
 	    		.then(() => {
+	    			this.onListFavourites;
 	    			console.log('File deleted');
 	    		},
 			    (error) => {
@@ -165,22 +155,24 @@ export class StorageService
      * @param extension string
      * @return Promise boolean
 	 */
-	isFileSaved(fileName: string, extension: string):Promise<boolean>
+	isFileSaved(fileName: string, extension: string)
 	{
 	    return this.platform.ready()
 	    .then(() => {
 			return this.file.checkFile(this.storageDirectory,fileName + '.' + extension)
-	  		.then((result) => {
-	  			if (result) {
-	    			return true;
-	    		}
+	  		.then((found) => {
+    			return true;
 	    	},
-		    (error) => {
+		    (notFound) => {
 		        return false;
 		    })
 		},
 	    (error) => {
-		    return false;
+	        const alertFailure = this.alertCtrl.create({
+	          	title: 'Server error',
+	          	buttons: ['Ok']
+	        });
+	        alertFailure.present();
 	    });
 	}
 
@@ -220,6 +212,7 @@ export class StorageService
 	 */
 	getImgLocalUrl()
 	{
+		console.log(this.imgLocalUrl);
 		return this.imgLocalUrl; 
 	}
 }
