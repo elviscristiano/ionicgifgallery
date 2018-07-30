@@ -64,16 +64,14 @@ export class HomePage
      * @param extension string
      * @return Promise boolean
      */
-    isFileSaved(fileName: string, extension: string):Promise<boolean>
+    isFileSaved(fileName: string, extension: string)
     {
         return this.storageService.isFileSaved(fileName, extension)
         .then((result) => {
-            if (result) {
-                return true;
-            }
+            return result;
         },
         (error) => {
-            return false;
+            this.onError(error);
         })
     }
 
