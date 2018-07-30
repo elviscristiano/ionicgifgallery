@@ -5,23 +5,22 @@
         placeholder="Search gifs"
         [(ngModel)]="myInput"
         [showCancelButton]="shouldShowCancel"
-        (ionInput)="onSearch($event)"
-        (ionClear)="onClear()">
+        (ionInput)="onSearch($event)">
     </ion-searchbar>
-    
+   
     <ion-list *ngIf="!items">
         <ion-item *ngFor="let trend of trends" no-lines class="my-page">
             <img src="{{trend.images.fixed_width_downsampled.url}}" item-start>
-            <ion-icon name="heart-outline" (tap)="onFavouriteGif(trend.images.original.url, trend.slug,trend.type)" *ngIf="!isFileSaved(trend.slug,trend.type)" item-end></ion-icon>
-            <ion-icon name="heart" (tap)="onUnfavouriteGif(trend.slug,trend.type)" *ngIf="isFileSaved(trend.slug,trend.type)" item-end></ion-icon>
+            <ion-icon name="heart-outline" *ngIf="!isFileSaved(trend.slug,trend.type)" (tap)="onFavouriteGif(trend.images.original.url, trend.slug,trend.type)" item-end></ion-icon>
+            <ion-icon name="heart" *ngIf="isFileSaved(trend.slug,trend.type)" (tap)="onUnfavouriteGif(trend.slug,trend.type)" item-end></ion-icon>
         </ion-item>
     </ion-list>
 
     <ion-list *ngIf="items">
         <ion-item *ngFor="let item of items" no-lines>
             <img src="{{item.images.fixed_width_downsampled.url}}" item-start>
-            <ion-icon name="heart-outline" (tap)="onFavouriteGif(item.images.original.url, item.slug,item.type)" *ngIf="!isFileSaved(item.slug,item.type)" item-end></ion-icon>
-            <ion-icon name="heart" (tap)="onUnfavouriteGif(item.slug,item.type)" *ngIf="isFileSaved(item.slug,item.type)" item-end></ion-icon>
+            <ion-icon name="heart-outline" *ngIf="!isFileSaved(item.slug,item.type)" (tap)="onFavouriteGif(item.images.original.url, item.slug,item.type)" item-end></ion-icon>
+            <ion-icon name="heart" *ngIf="isFileSaved(item.slug,item.type)" (tap)="onUnfavouriteGif(item.slug,item.type)" item-end></ion-icon>
         </ion-item>
     </ion-list>
 </ion-content>
